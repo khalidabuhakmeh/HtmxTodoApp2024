@@ -1,0 +1,60 @@
+@model TodoItemViewModel
+
+@if (Model.IsSelected)
+{
+    <tr>
+        <th scope="row">
+            @Model.Id
+            <input type="hidden" asp-for="Id" form="save"/>
+        </th>
+        <td>
+            <input type="text" asp-for="Text" class="form-control" placeholder="enter a task..." form="save"/>
+        </td>
+        <td>
+            <select class="form-select" asp-for="Priority" asp-items="TodoItemViewModel.Priorities" form="save">
+            </select>
+        </td>
+        <td>
+            <label class="form-check-label" asp-for="IsCompleted">
+                <input class="form-check-input" type="checkbox" asp-for="IsCompleted" form="save"/>
+            </label>
+        </td>
+        <td>
+            <button type="submit"
+                    class="btn btn-outline-primary"
+                    form="save">
+                Save
+            </button>
+            <button class="btn btn-outline-danger"
+                    hx-confirm="Are you sure?"
+                    hx-post hx-page="Index"
+                    hx-page-handler="Remove"
+                    hx-target="#tasks"
+                    hx-route-item="@Model.Id">
+                Remove
+            </button>
+        </td>
+    </tr>
+}
+else
+{
+    <tr>
+        <th scope="row">@Model.Id</th>
+        <td>@Model.Text</td>
+        <td>
+            <span class="badge bg-primary">@Model.Priority</span>
+        </td>
+        <td>@Model.CompletedDisplayText</td>
+        <td>
+            <button
+                hx-get
+                hx-page="Index"
+                hx-route-item="@Model.Id"
+                hx-target="#tasks"
+                class="btn btn-outline-info"
+                >
+                Edit
+            </button>
+        </td>
+    </tr>
+}

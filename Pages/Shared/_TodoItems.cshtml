@@ -1,0 +1,54 @@
+@model IndexModel
+
+
+
+<div id="tasks">
+    <h1 class="display-4 mb-4">Tasks</h1>
+    
+    <form class="d-flex my-3" hx-post hx-page="Index" hx-page-handler="Save" hx-target="#tasks">
+        <input class="form-control me-2" name="Text" type="text" placeholder="Add Task..." aria-label="New Task">
+        <button class="btn btn-outline-success" type="submit">Add</button>
+    </form>
+    
+    @foreach (var group in Model.Groups)
+    {
+        <div class="container">
+            <h2 class="display-6 mb-3 text-decoration-underline">@group.Key</h2>
+            @if (group.Value.Any())
+            {
+                <table class="table table-responsive-lg">
+                    <thead class="bg-dark text-white">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Task</th>
+                        <th scope="col">Priority</th>
+                        <th scope="col">Complete</th>
+                        <th scope="col">&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in group.Value)
+                    {
+                        @await Html.PartialAsync("_TodoItemRow", item)
+                    }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    There are currently no @group.Key tasks
+                </div>
+            }
+        </div>
+    }
+
+    <form method="post"
+          hx-post
+          hx-page="Index"
+          hx-page-handler="Save"
+          hx-target="#tasks"
+          asp-page="Index" asp-page-handler="Save" id="save">
+    </form>
+
+</div>
